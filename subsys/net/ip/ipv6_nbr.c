@@ -2393,6 +2393,10 @@ static enum net_verdict handle_ra_input(struct net_pkt *pkt,
 
 	nd_opt_hdr = (struct net_icmpv6_nd_opt_hdr *)
 				net_pkt_get_data(pkt, &nd_access);
+
+	/* Add neighbor based on link local address received in Router Advertisement */
+	nbr = add_nbr(net_pkt_iface(pkt), (struct in6_addr *)NET_IPV6_HDR(pkt)->src, true, NET_IPV6_NBR_STATE_INCOMPLETE);
+
 	while (nd_opt_hdr) {
 		net_pkt_acknowledge_data(pkt, &nd_access);
 
